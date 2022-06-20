@@ -3,6 +3,7 @@ package client;
 import io.restassured.config.RedirectConfig;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.config.SSLConfig;
+import io.restassured.http.Header;
 import io.restassured.response.Response;
 import java.util.HashMap;
 
@@ -17,6 +18,11 @@ public class BaseRestClient {
 
     protected Response getRequest(String uri) {
         return given().config(config).get(uri);
+    }
+
+    protected Response getRequest(String uri, String token) {
+        Header authHeader = new Header("Authorization", token);
+        return given().header(authHeader).config(config).get(uri);
     }
 
     protected Response getRequest(String uri, HashMap<String, Object> params) {
