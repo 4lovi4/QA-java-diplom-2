@@ -3,6 +3,7 @@ package client;
 import io.restassured.response.Response;
 import models.IngredientsHashList;
 import models.User;
+import io.qameta.allure.Step;
 
 public class TestMethods {
 
@@ -26,6 +27,7 @@ public class TestMethods {
         return client.postRequest(client.BASE_URL + client.ORDERS_ENDPOINT, ingredientsHashList);
     }
 
+    @Step("Отправить запрос создания пользователя POST /api/auth/register")
     public Response createUser(User user) {
         return client.postRequest(client.BASE_URL + client.REGISTER_ENDPOINT, user);
     }
@@ -36,5 +38,10 @@ public class TestMethods {
 
     public Response getUserInfo(String token) {
         return client.getRequest(client.BASE_URL + client.USER_ENDPOINT, token);
+    }
+
+    @Step("Проверка ответа запроса создания нового пользователя")
+    public void checkCreateUser(Response createUserResponse) {
+
     }
 }
