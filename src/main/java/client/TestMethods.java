@@ -2,8 +2,11 @@ package client;
 
 import io.restassured.response.Response;
 import models.IngredientsHashList;
+import models.Token;
 import models.User;
 import io.qameta.allure.Step;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 
 public class TestMethods {
 
@@ -14,15 +17,28 @@ public class TestMethods {
         private final String USER_ENDPOINT = "auth/user";
         private final String REGISTER_ENDPOINT = "auth/register";
         private final String AUTH_ENDPOINT = "auth/login";
+        private final String LOGOUT_ENDPOINT = "auth/logout";
         private final String TOKEN_ENDPOINT = "auth/token";
     }
 
     StellarBurgerRestClient client = new StellarBurgerRestClient();
 
+    public String genRandomAlfaString() {
+        return RandomStringUtils.randomAlphabetic(6, 16);
+    }
+
+    public String genRandomAlfaNumString() {
+        return RandomStringUtils.randomAlphanumeric(4, 16);
+    }
+
+    public Long randomNum() { return RandomUtils.nextLong(1L, 10L); }
+
+
     public Response getIngredients() {
         return client.getRequest(client.BASE_URL + client.INGREDIENTS_ENDPOINT);
     }
 
+    @Step("Получение информации об ингредиентах /api/ingredients")
     public Response createOrder(IngredientsHashList ingredientsHashList) {
         return client.postRequest(client.BASE_URL + client.ORDERS_ENDPOINT, ingredientsHashList);
     }
@@ -32,16 +48,37 @@ public class TestMethods {
         return client.postRequest(client.BASE_URL + client.REGISTER_ENDPOINT, user);
     }
 
+    @Step("Отправить запрос логина пользователя POST /api/auth/login")
     public Response loginUser(User user) {
         return client.postRequest(client.BASE_URL + client.AUTH_ENDPOINT, user);
     }
 
-    public Response getUserInfo(String token) {
-        return client.getRequest(client.BASE_URL + client.USER_ENDPOINT, token);
+    @Step("Отправить запрос логина пользователя POST /api/auth/login")
+    public Response getUserInfo(String auth) {
+        return client.getRequest(client.BASE_URL + client.USER_ENDPOINT, auth);
+    }
+
+    @Step("Запрос выхода из системы POSY /api/auth/logout")
+    public Response logoutUser(Token token) {
+        return client.postRequest(client.BASE_URL + client.LOGOUT_ENDPOINT, token);
+    }
+
+    @Step("Запрос обновления токена POST /api/auth/token")
+    public Response logoutUser(User user) {
+        return client.postRequest(client.BASE_URL + client.TOKEN_ENDPOINT, user);
+    }
+
+    @Step("Запрос получения информции пользователя PATCH /api/auth/user")
+    public Response updateUserInfo(String auth, User user) {
+        return client.patchRequest(client.BASE_URL + client.TOKEN_ENDPOINT, auth, user);
+    }
+
+    @Step("Запрос удаления пользователя DELETE /api/auth/user")
+    public Response deleteUser(String auth) {
+        return client.deleteRequest(client.BASE_URL + client.TOKEN_ENDPOINT, auth);
     }
 
     @Step("Проверка ответа запроса создания нового пользователя")
     public void checkCreateUser(Response createUserResponse) {
-
     }
 }
