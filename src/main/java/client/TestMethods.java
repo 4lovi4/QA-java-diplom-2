@@ -14,11 +14,13 @@ public class TestMethods {
         private final String BASE_URL = "https://stellarburgers.nomoreparties.site/api/";
         private final String INGREDIENTS_ENDPOINT = "ingredients";
         private final String ORDERS_ENDPOINT = "orders";
+        private final String ORDERS_ALL_ENDPOINT = "orders/all";
         private final String USER_ENDPOINT = "auth/user";
         private final String REGISTER_ENDPOINT = "auth/register";
         private final String AUTH_ENDPOINT = "auth/login";
         private final String LOGOUT_ENDPOINT = "auth/logout";
         private final String TOKEN_ENDPOINT = "auth/token";
+        private final String PASSWORD_RESET_ENDPOINT = "api/password-reset";
     }
 
     StellarBurgerRestClient client = new StellarBurgerRestClient();
@@ -76,6 +78,16 @@ public class TestMethods {
     @Step("Запрос удаления пользователя DELETE /api/auth/user")
     public Response deleteUser(String auth) {
         return client.deleteRequest(client.BASE_URL + client.TOKEN_ENDPOINT, auth);
+    }
+
+    @Step("Запрос получения всех заказов GET /api/orders/all")
+    public Response getAllOrders() {
+        return client.getRequest(client.BASE_URL + client.ORDERS_ALL_ENDPOINT);
+    }
+
+    @Step("Запрос заказов для конкретного пользователя GET /api/orders")
+    public Response getOrdersByUser(String auth) {
+        return client.getRequest(client.BASE_URL + client.ORDERS_ENDPOINT, auth);
     }
 
     @Step("Проверка ответа запроса создания нового пользователя")
