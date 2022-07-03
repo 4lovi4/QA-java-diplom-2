@@ -35,7 +35,6 @@ public class TestMethods {
 
     public Long randomNum() { return RandomUtils.nextLong(1L, 10L); }
 
-
     public Response getIngredients() {
         return client.getRequest(client.BASE_URL + client.INGREDIENTS_ENDPOINT);
     }
@@ -47,6 +46,8 @@ public class TestMethods {
 
     @Step("Отправить запрос создания пользователя POST /api/auth/register")
     public Response createUser(User user) {
+        System.out.println(user);
+        System.out.println(client.BASE_URL + client.REGISTER_ENDPOINT);
         return client.postRequest(client.BASE_URL + client.REGISTER_ENDPOINT, user);
     }
 
