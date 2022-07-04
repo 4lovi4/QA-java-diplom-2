@@ -7,10 +7,16 @@ import org.junit.After;
 import models.User;
 import client.TestMethods;
 import io.restassured.response.Response;
+
 import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.runner.RunWith;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 
 import java.util.ArrayList;
 
+@RunWith(JUnitParamsRunner.class)
 public class TestCreateUser {
 
     TestMethods testMethods = new TestMethods();
@@ -62,6 +68,12 @@ public class TestCreateUser {
     @Test
     @DisplayName("Попытка создание нового пользователя без обязательного поля")
     @Description("В запросе передаём данные нового пользователя без обязательного поля")
+    @Parameters({"email, name",
+            "email, password",
+            "name, password",
+            "email",
+            "password",
+            "name"})
     public void checkCreateUserWithoutRequiredField() {
         User newUser = new User(testMethods.genRandomAlfaNumString() + "@" + testMethods.genRandomAlfaString() + ".test",
                 testMethods.genRandomAlfaNumString(), testMethods.genRandomAlfaString());

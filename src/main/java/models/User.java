@@ -1,5 +1,7 @@
 package models;
 
+import junitparams.converters.Nullable;
+
 public class User {
     private String email;
     private String password;
@@ -14,6 +16,10 @@ public class User {
     public User(String email, String name) {
         this.email = email;
         this.name = name;
+    }
+
+    public User(String email) {
+        this.email = email;
     }
 
     public String getEmail() {
