@@ -33,6 +33,7 @@ public class BaseRestClient {
         return given().config(config)
                 .header("Content-Type", "application/json")
                 .body(payload)
+                .when()
                 .post(uri);
     }
 
