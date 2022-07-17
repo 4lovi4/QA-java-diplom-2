@@ -22,6 +22,9 @@ public class User {
         this.email = email;
     }
 
+    public User() {
+    }
+
     public String getEmail() {
         return email;
     }
@@ -44,5 +47,10 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("{email:%s password:%s name:%s}", this.email, this.password, this.name);
     }
 }
