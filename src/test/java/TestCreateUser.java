@@ -20,7 +20,7 @@ public class TestCreateUser {
     private ArrayList<AuthResponse> testAuthUsers = new ArrayList<>();
 
     /*
-    Удаляем создынных в ходе тестов пользователей
+    Удаляем созданных в ходе тестов пользователей
     */
     @After
     public void cleanTest() {
@@ -84,10 +84,6 @@ public class TestCreateUser {
         assertThat(Boolean.valueOf(wrongResponse.then().extract().path("success").toString())).isFalse();
         assertThat((wrongResponse.then().extract().path("message").toString()))
                 .isEqualTo("Email, password and name are required fields");
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        testMethods.timeout(1000);
     }
 }

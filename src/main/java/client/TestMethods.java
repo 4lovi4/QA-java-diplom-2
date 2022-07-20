@@ -92,4 +92,13 @@ public class TestMethods {
     @Step("Проверка ответа запроса создания нового пользователя")
     public void checkCreateUser(Response createUserResponse) {
     }
+
+    @Step("Ожидание {t} мс")
+    public void timeout(long t) throws RuntimeException {
+        try {
+            Thread.sleep(t);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
