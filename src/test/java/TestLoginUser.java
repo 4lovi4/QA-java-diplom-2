@@ -2,7 +2,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import models.AuthResponse;
 import org.apache.http.HttpStatus;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.After;
@@ -12,7 +11,7 @@ import io.restassured.response.Response;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.runner.RunWith;
 import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;;
+import junitparams.Parameters;
 
 
 @RunWith(JUnitParamsRunner.class)

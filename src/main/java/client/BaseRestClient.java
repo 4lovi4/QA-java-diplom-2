@@ -66,6 +66,10 @@ public class BaseRestClient {
         return given().header(authHeader).config(config).patch(uri, payload);
     }
 
+    protected Response patchRequest(String uri, Object payload) {
+        return given().config(config).patch(uri, payload);
+    }
+
     protected Response deleteRequest(String uri, String authToken) {
         Header authHeader = new Header("Authorization", authToken);
         return given().config(config)

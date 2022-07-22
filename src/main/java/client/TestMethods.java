@@ -59,20 +59,26 @@ public class TestMethods {
         return client.getRequest(client.BASE_URL + client.USER_ENDPOINT, auth);
     }
 
-    @Step("Запрос выхода из системы POSY /api/auth/logout")
+    @Step("Запрос изменения информации пользователя PATCH /api/auth/user")
+    public Response updateUserInfo(String auth, User user) {
+        return client.patchRequest(client.BASE_URL + client.USER_ENDPOINT, auth, user);
+    }
+
+    @Step("Запрос изменения информации пользователя без авторизации PATCH /api/auth/user")
+    public Response updateUserInfo(User user) {
+        return client.patchRequest(client.BASE_URL + client.USER_ENDPOINT, user);
+    }
+
+    @Step("Запрос выхода из системы POST /api/auth/logout")
     public Response logoutUser(Token token) {
         return client.postRequest(client.BASE_URL + client.LOGOUT_ENDPOINT, token);
     }
 
     @Step("Запрос обновления токена POST /api/auth/token")
-    public Response logoutUser(User user) {
+    public Response updateToken(User user) {
         return client.postRequest(client.BASE_URL + client.TOKEN_ENDPOINT, user);
     }
 
-    @Step("Запрос получения информции пользователя PATCH /api/auth/user")
-    public Response updateUserInfo(String auth, User user) {
-        return client.patchRequest(client.BASE_URL + client.TOKEN_ENDPOINT, auth, user);
-    }
 
     @Step("Запрос удаления пользователя DELETE /api/auth/user")
     public Response deleteUser(String auth) {
@@ -89,9 +95,6 @@ public class TestMethods {
         return client.getRequest(client.BASE_URL + client.ORDERS_ENDPOINT, auth);
     }
 
-    @Step("Проверка ответа запроса создания нового пользователя")
-    public void checkCreateUser(Response createUserResponse) {
-    }
 
     @Step("Ожидание {t} мс")
     public void timeout(long t) throws RuntimeException {
