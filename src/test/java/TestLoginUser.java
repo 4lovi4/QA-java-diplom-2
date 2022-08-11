@@ -52,7 +52,7 @@ public class TestLoginUser {
     @Description("Запрос POST auth/login возвращает 401 UNAUTHORIZED, код success: false, описание ошибки \"email or password are incorrect\"")
     @Parameters({"email", "password"})
     public void checkWrongLogin(String userParam) {
-        User changeUser = user;
+        User changeUser = new User(user.getEmail(), user.getPassword(), user.getName());
         switch (userParam) {
             case "email":
                 changeUser.setEmail(testMethods.genRandomAlfaNumString());

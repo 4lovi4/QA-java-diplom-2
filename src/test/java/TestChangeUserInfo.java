@@ -9,9 +9,7 @@ import org.junit.After;
 import models.User;
 import client.TestMethods;
 import io.restassured.response.Response;
-
 import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.runner.RunWith;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;;
@@ -27,7 +25,9 @@ public class TestChangeUserInfo {
     public void prepareTest() {
         user = new User(testMethods.genRandomAlfaNumString() + "@" +
                 testMethods.genRandomAlfaString() + ".test", testMethods.genRandomAlfaNumString(), testMethods.genRandomAlfaString());
+        System.out.println(user.toString());
         authUser = testMethods.createUser(user).as(AuthResponse.class);
+//        authUser.toString()
         testMethods.timeout(1000);
     }
 
@@ -43,15 +43,25 @@ public class TestChangeUserInfo {
     @Description("Запрос PATCH auth/user c заголовком Authorization, в котором передаётся accessToken, возвращает 200 OK, код success, актуальные email, name")
     @Parameters({"email", "password", "name"})
     public void checkChangeUserInfoWithAuth(String userParam) {
+        authUser = testMethods.loginUser(user).as(AuthResponse.class);
+        String newValue;
         switch (userParam) {
             case "email":
-                user.setEmail(testMethods.genRandomAlfaNumString() + "@" + testMethods.genRandomAlfaString() + ".test");
+                newValue = testMethods.genRandomAlfaNumString() + "@" + testMethods.genRandomAlfaString() + ".test";
+                user.setEmail(newValue);
+                break;
             case "password":
-                user.setPassword(testMethods.genRandomAlfaNumString());
+                newValue = testMethods.genRandomAlfaNumString();
+                user.setPassword(newValue);
+                break;
             case "name":
-                user.setName(testMethods.genRandomAlfaString());
+                newValue = testMethods.genRandomAlfaNumString();
+                user.setName(newValue);
+                break;
         }
+        System.out.println(user.toString());
         Response changeUserResponse = testMethods.updateUserInfo(authUser.getAccessToken(), user);
+        System.out.println(changeUserResponse.then().extract().path(".").toString());
         assertThat(changeUserResponse.then().extract().statusCode()).isEqualTo(HttpStatus.SC_OK);
         assertThat(Boolean.valueOf(changeUserResponse.then().extract().path("success").toString())).isTrue();
         assertThat((changeUserResponse.then().extract().path("user.email").toString())).isEqualTo(user.getEmail().toLowerCase());
@@ -72,14 +82,17 @@ public class TestChangeUserInfo {
     @Description("Запрос PATCH auth/user без заголовка Authorization, в котором передаётся accessToken, возвращает 200 OK, код success, актуальные email, name")
     @Parameters({"email", "password", "name"})
     public void checkChangeUserInfoWithoutAuth(String userParam) {
-        User newUser = user;
+        User newUser = new User(user.getEmail(), user.getPassword(), user.getName());
         switch (userParam) {
             case "email":
                 newUser.setEmail(testMethods.genRandomAlfaNumString() + "@" + testMethods.genRandomAlfaString() + ".test");
+                break;
             case "password":
                 newUser.setPassword(testMethods.genRandomAlfaNumString());
+                break;
             case "name":
                 newUser.setName(testMethods.genRandomAlfaString());
+                break;
         }
         Response loginResponse = testMethods.loginUser(user);
         assertThat(loginResponse.then().extract().statusCode()).isEqualTo(HttpStatus.SC_OK);

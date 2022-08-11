@@ -44,4 +44,10 @@ public class AuthResponse {
     public void setUser(User user) {
         this.user = user;
     }
+
+    @Override
+    public String toString() {
+        return String.format("{success: %b, user: {email: %s, name: %s} }",
+                this.getSuccess(), this.getUser().getEmail(), this, getUser().getName());
+    }
 }

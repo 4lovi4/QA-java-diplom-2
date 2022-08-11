@@ -63,11 +63,11 @@ public class BaseRestClient {
 
     protected Response patchRequest(String uri, String token, Object payload) {
         Header authHeader = new Header("Authorization", token);
-        return given().header(authHeader).config(config).patch(uri, payload);
+        return given().header(authHeader).config(config).body(payload).patch(uri);
     }
 
     protected Response patchRequest(String uri, Object payload) {
-        return given().config(config).patch(uri, payload);
+        return given().config(config).body(payload).patch(uri);
     }
 
     protected Response deleteRequest(String uri, String authToken) {
