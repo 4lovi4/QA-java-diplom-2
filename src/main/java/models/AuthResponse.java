@@ -47,7 +47,7 @@ public class AuthResponse {
 
     @Override
     public String toString() {
-        return String.format("{success: %b, user: {email: %s, name: %s} }",
-                this.getSuccess(), this.getUser().getEmail(), this, getUser().getName());
+        return String.format("{success: %s, user: {email: %s, name: %s} }",
+                this.getSuccess().toString(), this.getUser().getEmail(), this.getUser().getName());
     }
 }
