@@ -3,6 +3,7 @@ package client;
 import io.restassured.config.RedirectConfig;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.config.SSLConfig;
+import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 import java.util.HashMap;
@@ -14,7 +15,6 @@ public class BaseRestClient {
     private final RestAssuredConfig config = RestAssuredConfig.newConfig()
             .sslConfig(new SSLConfig().relaxedHTTPSValidation())
             .redirect(new RedirectConfig().followRedirects(true));
-
 
     protected Response getRequest(String uri) {
         return given().config(config).get(uri);
@@ -63,7 +63,8 @@ public class BaseRestClient {
 
     protected Response patchRequest(String uri, String token, Object payload) {
         Header authHeader = new Header("Authorization", token);
-        return given().header(authHeader).config(config).body(payload).patch(uri);
+        Response response = given().config(config).contentType(ContentType.JSON).header(authHeader).body(payload).patch(uri);
+        return response;
     }
 
     protected Response patchRequest(String uri, Object payload) {
