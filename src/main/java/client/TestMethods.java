@@ -35,6 +35,7 @@ public class TestMethods {
 
     public Long randomNum() { return RandomUtils.nextLong(1L, 10L); }
 
+    @Step("Получение информации об ингредиентах GET /api/ingredients")
     public Response getIngredients() {
         return client.getRequest(client.BASE_URL + client.INGREDIENTS_ENDPOINT);
     }

@@ -34,4 +34,18 @@ public class TestGetOrders {
         testMethods.timeout(1000);
         testMethods.deleteUser(authUser.getAccessToken());
     }
+
+    @Test
+    @DisplayName("Получить заказы авторизованного пользователя")
+    @Description("После успешной авторизации пользователя, у которого есть заказы, вызвать метод /api/orders, передав токен")
+    public void getOrdersWithAuth() {
+
+    }
+
+    @Test
+    @DisplayName("Получить заказы неавторизованного пользователя")
+    @Description("Вызвать метод GET /api/orders, не передав токен")
+    public void getOrdersWithoutAuth() {
+
+    }
 }
