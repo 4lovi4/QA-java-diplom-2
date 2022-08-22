@@ -1,14 +1,11 @@
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
-import models.AuthResponse;
-import models.IngredientsHashList;
-import models.Token;
+import models.*;
 import org.apache.http.HttpStatus;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.After;
-import models.User;
 import client.TestMethods;
 import io.restassured.response.Response;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,7 +22,7 @@ public class TestCreateOrder {
 
     @BeforeClass
     public void prepareIngredients() {
-        currentIngredients = testMethods.getIngredients().as(IngredientsHashList.class);
+        GetAllIngredientsResponse getIngredientsListResponse = testMethods.getIngredients().as(GetAllIngredientsResponse.class);
     }
 
     @Before
@@ -34,7 +31,7 @@ public class TestCreateOrder {
                 testMethods.genRandomAlfaString() + ".test", testMethods.genRandomAlfaNumString(), testMethods.genRandomAlfaString());
         System.out.println(user.toString());
         authUser = testMethods.createUser(user).as(AuthResponse.class);
-        testMethods.timeout(1000);
+        currentIngredients = testMethods.getIngredients().as(IngredientsHashList.class);
     }
 
     @After
