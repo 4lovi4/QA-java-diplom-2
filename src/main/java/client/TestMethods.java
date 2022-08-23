@@ -8,7 +8,7 @@ import io.qameta.allure.Step;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 
-public class TestMethods {
+public class TestMethods     {
 
     private class StellarBurgerRestClient extends BaseRestClient {
         private final String BASE_URL = "https://stellarburgers.nomoreparties.site/api/";
@@ -43,6 +43,11 @@ public class TestMethods {
     @Step("Получение информации об ингредиентах /api/ingredients")
     public Response createOrder(IngredientsHashList ingredientsHashList) {
         return client.postRequest(client.BASE_URL + client.ORDERS_ENDPOINT, ingredientsHashList);
+    }
+
+    @Step("Получение информации об ингредиентах /api/ingredients")
+    public Response createOrder(IngredientsHashList ingredientsHashList, String authToken) {
+        return client.postRequest(client.BASE_URL + client.ORDERS_ENDPOINT, authToken, ingredientsHashList);
     }
 
     @Step("Отправить запрос создания пользователя POST /api/auth/register")

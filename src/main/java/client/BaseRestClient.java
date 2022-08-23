@@ -30,8 +30,20 @@ public class BaseRestClient {
     }
 
     protected Response postRequest(String uri, Object payload) {
+        Header contentHeader = new Header("Content-Type", "application/json");
         return given().config(config)
-                .header("Content-Type", "application/json")
+                .header(contentHeader)
+                .body(payload)
+                .when()
+                .post(uri);
+    }
+
+    protected Response postRequest(String uri, String token, Object payload) {
+        Header authHeader = new Header("Authorization", token);
+        Header contentHeader = new Header("Content-Type", "application/json");
+        return given().config(config)
+                .header(authHeader)
+                .header(contentHeader)
                 .body(payload)
                 .when()
                 .post(uri);

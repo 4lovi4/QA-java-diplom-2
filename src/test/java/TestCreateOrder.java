@@ -2,40 +2,42 @@ import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import models.*;
 import org.apache.http.HttpStatus;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.After;
+import org.junit.*;
 import client.TestMethods;
 import io.restassured.response.Response;
+
 import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.runner.RunWith;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 @RunWith(JUnitParamsRunner.class)
 public class TestCreateOrder {
-    TestMethods testMethods = new TestMethods();
-    private AuthResponse authUser;
-    private User user;
-    private IngredientsHashList currentIngredients;
+    static TestMethods testMethods = new TestMethods();
+    private static AuthResponse authUser;
+    private static User user;
+    private static List<Ingredient> currentIngredients;
 
     @BeforeClass
-    public void prepareIngredients() {
+    public static void prepareUserAndIngredients() {
         GetAllIngredientsResponse getIngredientsListResponse = testMethods.getIngredients().as(GetAllIngredientsResponse.class);
+        currentIngredients = getIngredientsListResponse.getData();
+        user = new User(testMethods.genRandomAlfaNumString() + "@" + testMethods.genRandomAlfaString() + ".test", testMethods.genRandomAlfaNumString(), testMethods.genRandomAlfaString());
+        authUser = testMethods.createUser(user).as(AuthResponse.class);
     }
 
     @Before
     public void prepareTest() {
-        user = new User(testMethods.genRandomAlfaNumString() + "@" +
-                testMethods.genRandomAlfaString() + ".test", testMethods.genRandomAlfaNumString(), testMethods.genRandomAlfaString());
-        System.out.println(user.toString());
-        authUser = testMethods.createUser(user).as(AuthResponse.class);
-        currentIngredients = testMethods.getIngredients().as(IngredientsHashList.class);
+
     }
 
-    @After
-    public void clearTest() {
+    @AfterClass
+    public static void clearTest() {
         testMethods.logoutUser(new Token(authUser.getRefreshToken()));
         testMethods.timeout(1000);
         testMethods.deleteUser(authUser.getAccessToken());
@@ -45,14 +47,34 @@ public class TestCreateOrder {
     @DisplayName("Создание заказа от авторизованного пользователя")
     @Description("Пользователь после авторизации получает список ингредиентов, выбираются случайные и вызывается метод POST /api/orders")
     public void createOrderAuth() {
-
+        List<String> ingredientsHashList = new ArrayList<String>();
+        Random random = new Random();
+        for (int i = 0; i < random.nextInt(currentIngredients.size()); i++) {
+            ingredientsHashList.add(currentIngredients.get(random.nextInt(currentIngredients.size())).get_id());
+        }
+        Response orderResponse = testMethods.createOrder(new IngredientsHashList(ingredientsHashList), authUser.getAccessToken());
+        assertThat(orderResponse.then().extract().statusCode()).isEqualTo(HttpStatus.SC_OK);
+        CreateOrderResponse orderCreated = orderResponse.as(CreateOrderResponse.class);
+        assertThat(orderCreated.getSuccess()).isTrue();
+        assertThat(orderCreated.getName()).isNotEmpty();
+        assertThat(orderCreated.getOrder()).isNotNull();
     }
 
     @Test
     @DisplayName("Создание заказа от неавторизованного пользователя")
     @Description("Получить список ингредиентов, выбрать случайные и вызваеть метод POST /api/orders, не передав токен")
     public void createOrderWithoutAuth() {
-
+        List<String> ingredientsHashList = new ArrayList<String>();
+        Random random = new Random();
+        for (int i = 0; i < random.nextInt(currentIngredients.size()); i++) {
+            ingredientsHashList.add(currentIngredients.get(random.nextInt(currentIngredients.size())).get_id());
+        }
+        Response orderResponse = testMethods.createOrder(new IngredientsHashList(ingredientsHashList));
+        assertThat(orderResponse.then().extract().statusCode()).isEqualTo(HttpStatus.SC_OK);
+        CreateOrderResponse orderCreated = orderResponse.as(CreateOrderResponse.class);
+        assertThat(orderCreated.getSuccess()).isTrue();
+        assertThat(orderCreated.getName()).isNotEmpty();
+        assertThat(orderCreated.getOrder()).isNotNull();
     }
 
     @Test
