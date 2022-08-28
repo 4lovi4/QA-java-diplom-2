@@ -45,24 +45,33 @@ public class TestCreateOrder {
 
     @Test
     @DisplayName("Создание заказа от авторизованного пользователя")
-    @Description("Пользователь после авторизации получает список ингредиентов, выбираются случайные и вызывается метод POST /api/orders")
+    @Description("Пользователь после авторизации получает список ингредиентов, выбираются случайные и вызывается метод POST /api/orders." +
+            "\nВ ответе будет информация о пользователе, статус заказа, список ингредиентов, цена, название и номер.")
     public void createOrderAuth() {
         List<String> ingredientsHashList = new ArrayList<String>();
         Random random = new Random();
+        Double burgerPrice = 0.0;
         for (int i = 0; i < random.nextInt(currentIngredients.size()); i++) {
-            ingredientsHashList.add(currentIngredients.get(random.nextInt(currentIngredients.size())).get_id());
+            Ingredient ingredient = currentIngredients.get(random.nextInt(currentIngredients.size()));
+            ingredientsHashList.add(ingredient.get_id());
+            burgerPrice += ingredient.getPrice();
         }
         Response orderResponse = testMethods.createOrder(new IngredientsHashList(ingredientsHashList), authUser.getAccessToken());
         assertThat(orderResponse.then().extract().statusCode()).isEqualTo(HttpStatus.SC_OK);
         CreateOrderResponse orderCreated = orderResponse.as(CreateOrderResponse.class);
         assertThat(orderCreated.getSuccess()).isTrue();
         assertThat(orderCreated.getName()).isNotEmpty();
-        assertThat(orderCreated.getOrder()).isNotNull();
+        assertThat(orderCreated.getOrder().getIngredients().size()).isEqualTo(ingredientsHashList.size());
+        assertThat(orderCreated.getOrder().getNumber()).isNotNull();
+        assertThat(orderCreated.getOrder().getPrice()).isEqualTo(burgerPrice);
+        assertThat(orderCreated.getOrder().getOwner().getName()).isEqualTo(authUser.getUser().getName());
+        assertThat(orderCreated.getOrder().getOwner().getEmail()).isEqualTo(authUser.getUser().getEmail());
     }
 
     @Test
     @DisplayName("Создание заказа от неавторизованного пользователя")
-    @Description("Получить список ингредиентов, выбрать случайные и вызваеть метод POST /api/orders, не передав токен")
+    @Description("Получить список ингредиентов, выбрать случайные и вызваеть метод POST /api/orders, не передав токен." +
+            "\nВ ответе приходит имя бургера, статус и номер заказа.")
     public void createOrderWithoutAuth() {
         List<String> ingredientsHashList = new ArrayList<String>();
         Random random = new Random();
@@ -74,22 +83,43 @@ public class TestCreateOrder {
         CreateOrderResponse orderCreated = orderResponse.as(CreateOrderResponse.class);
         assertThat(orderCreated.getSuccess()).isTrue();
         assertThat(orderCreated.getName()).isNotEmpty();
-        assertThat(orderCreated.getOrder()).isNotNull();
+        assertThat(orderCreated.getOrder().getNumber()).isNotNull();
     }
 
     @Test
     @DisplayName("Создание заказа c ингредиентами")
-    @Description("Пользователь после авторизации получает список ингредиентов вызывает, выбирает случайные в количестве ingredientsAmount и передаёт их в метод POST /api/orders")
+    @Description("Пользователь после авторизации получает список ингредиентов вызывает, выбирает случайные в количестве ingredientsAmount и передаёт их в метод POST /api/orders.")
     @Parameters({"1", "2", "3"})
     public void createOrderWithIngredients(String ingredientsAmount) {
-
+        List<String> ingredientsHashList = new ArrayList<String>();
+        Random random = new Random();
+        Double burgerPrice = 0.0;
+        for (int i = 0; i < Integer.parseInt(ingredientsAmount); i++) {
+            Ingredient ingredient = currentIngredients.get(random.nextInt(currentIngredients.size()));
+            ingredientsHashList.add(ingredient.get_id());
+            burgerPrice += ingredient.getPrice();
+        }
+        Response orderResponse = testMethods.createOrder(new IngredientsHashList(ingredientsHashList), authUser.getAccessToken());
+        assertThat(orderResponse.then().extract().statusCode()).isEqualTo(HttpStatus.SC_OK);
+        CreateOrderResponse orderCreated = orderResponse.as(CreateOrderResponse.class);
+        assertThat(orderCreated.getSuccess()).isTrue();
+        assertThat(orderCreated.getName()).isNotEmpty();
+        assertThat(orderCreated.getOrder().getIngredients().size()).isEqualTo(Integer.parseInt(ingredientsAmount));
+        assertThat(orderCreated.getOrder().getNumber()).isNotNull();
+        assertThat(orderCreated.getOrder().getPrice()).isEqualTo(burgerPrice);
+        assertThat(orderCreated.getOrder().getOwner().getName()).isEqualTo(authUser.getUser().getName());
+        assertThat(orderCreated.getOrder().getOwner().getEmail()).isEqualTo(authUser.getUser().getEmail());
     }
 
     @Test
     @DisplayName("Создание заказа без ингредиентов")
-    @Description("Пользователь после авторизации вызывает метод POST /api/orders, не передавая в теле запроса списка ингредиентов")
+    @Description("Пользователь после авторизации вызывает метод POST /api/orders, не передавая в теле запроса ингредиентов в списке")
     public void createOrderWithoutIngredients() {
-
+        List<String> ingredientsHashList = new ArrayList<String>();
+        Response orderResponse = testMethods.createOrder(new IngredientsHashList(ingredientsHashList), authUser.getAccessToken());
+        assertThat(orderResponse.then().extract().statusCode()).isEqualTo(HttpStatus.SC_BAD_REQUEST);
+        assertThat(Boolean.parseBoolean(orderResponse.then().extract().path("success").toString())).isFalse();
+        assertThat(orderResponse.then().extract().path("message").toString()).isEqualTo("Ingredient ids must be provided");
     }
 
     @Test

@@ -1,16 +1,24 @@
 package models;
 
-import junitparams.converters.Nullable;
-
 public class User {
     private String email;
     private String password;
     private String name;
+    private String createdAt;
+    private String updatedAt;
 
     public User(String email, String password, String name) {
         this.email = email;
         this.password = password;
         this.name = name;
+    }
+
+    public User(String email, String password, String name, String createdAt, String updatedAt) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public User(String email, String name) {

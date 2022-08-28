@@ -8,14 +8,14 @@ public class Ingredient {
     private Long fat;
     private Long carbohydrates;
     private Long calories;
-    private Long price;
+    private Double price;
     private String image;
     private String image_mobile;
     private String image_large;
     private float __v;
 
     public Ingredient(String _id, String name, String type, Long proteins,
-                      Long fat, Long carbohydrates, Long calories, Long price,
+                      Long fat, Long carbohydrates, Long calories, Double price,
                       String image, String image_mobile, String image_large)
     {
         this._id = _id;
@@ -87,11 +87,11 @@ public class Ingredient {
         this.calories = calories;
     }
 
-    public Long getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
