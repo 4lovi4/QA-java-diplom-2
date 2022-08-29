@@ -33,6 +33,10 @@ public class TestMethods     {
         return RandomStringUtils.randomAlphanumeric(4, 16);
     }
 
+    public String genRandomAlfaNumString(int size) {
+        return RandomStringUtils.randomAlphanumeric(size);
+    }
+
     public Long randomNum() { return RandomUtils.nextLong(1L, 10L); }
 
     @Step("Получение информации об ингредиентах GET /api/ingredients")

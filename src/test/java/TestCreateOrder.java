@@ -126,14 +126,30 @@ public class TestCreateOrder {
     @DisplayName("Создание заказа с неправильными хэшами ингредиентов")
     @Description("Пользователь после успешной авторизации генерирует случайные хэши ингредиентов, вызывается метод POST /api/orders, в котором передаётся список с неправильными хэшами инредиентов")
     public void createOrderWrongIngredients() {
-
+        List<String> ingredientsHashList = new ArrayList<String>();
+        Random random = new Random();
+        for (int i = 0; i < random.nextInt(currentIngredients.size()); i++) {
+            String wrongHashId = testMethods.genRandomAlfaNumString(24);
+            ingredientsHashList.add(wrongHashId);
+            Response errorResponse = testMethods.createOrder(new IngredientsHashList(ingredientsHashList), authUser.getAccessToken());
+            assertThat(errorResponse.then().extract().statusCode()).isEqualTo(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Test
     @DisplayName("Создание заказа, где есть правильные и неправильными хэши ингредиентов")
     @Description("Пользователь после успешной авторизации получает список ингредиентов и генерирует случайные хэши ингредиентов, вызывается метод POST /api/orders, в котором передаётся список с неправильными хэшами инредиентов")
     public void createOrderPartlyWrongIngredients() {
-
+        List<String> ingredientsHashList = new ArrayList<String>();
+        Random random = new Random();
+        int ingredientsAmount = random.nextInt(currentIngredients.size());
+        for (int i = 0; i < ingredientsAmount; i++) {
+            String wrongHashId = testMethods.genRandomAlfaNumString(24);
+            Ingredient ingredient = currentIngredients.get(random.nextInt(currentIngredients.size()));
+            if(i % 2 == 0 ) ingredientsHashList.add(wrongHashId);
+            else ingredientsHashList.add(ingredient.get_id());
+            Response errorResponse = testMethods.createOrder(new IngredientsHashList(ingredientsHashList), authUser.getAccessToken());
+            assertThat(errorResponse.then().extract().statusCode()).isEqualTo(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        }
     }
-
 }
