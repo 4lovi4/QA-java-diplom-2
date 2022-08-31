@@ -33,7 +33,8 @@ public class TestCreateOrder {
 
     @Before
     public void prepareTest() {
-
+//        Вызов таймаута перед каждым тестом, чтобы избежать 429 Too Many Requests
+        testMethods.timeout(1000);
     }
 
     @AfterClass
@@ -131,9 +132,9 @@ public class TestCreateOrder {
         for (int i = 0; i < random.nextInt(currentIngredients.size()); i++) {
             String wrongHashId = testMethods.genRandomAlfaNumString(24);
             ingredientsHashList.add(wrongHashId);
-            Response errorResponse = testMethods.createOrder(new IngredientsHashList(ingredientsHashList), authUser.getAccessToken());
-            assertThat(errorResponse.then().extract().statusCode()).isEqualTo(HttpStatus.SC_INTERNAL_SERVER_ERROR);
         }
+        Response errorResponse = testMethods.createOrder(new IngredientsHashList(ingredientsHashList), authUser.getAccessToken());
+        assertThat(errorResponse.then().extract().statusCode()).isEqualTo(HttpStatus.SC_INTERNAL_SERVER_ERROR);
     }
 
     @Test
@@ -148,8 +149,8 @@ public class TestCreateOrder {
             Ingredient ingredient = currentIngredients.get(random.nextInt(currentIngredients.size()));
             if(i % 2 == 0 ) ingredientsHashList.add(wrongHashId);
             else ingredientsHashList.add(ingredient.get_id());
-            Response errorResponse = testMethods.createOrder(new IngredientsHashList(ingredientsHashList), authUser.getAccessToken());
-            assertThat(errorResponse.then().extract().statusCode()).isEqualTo(HttpStatus.SC_INTERNAL_SERVER_ERROR);
         }
+        Response errorResponse = testMethods.createOrder(new IngredientsHashList(ingredientsHashList), authUser.getAccessToken());
+        assertThat(errorResponse.then().extract().statusCode()).isEqualTo(HttpStatus.SC_INTERNAL_SERVER_ERROR);
     }
 }

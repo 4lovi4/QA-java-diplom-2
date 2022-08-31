@@ -105,6 +105,10 @@ public class TestMethods     {
         return client.getRequest(client.BASE_URL + client.ORDERS_ENDPOINT, auth);
     }
 
+    @Step("Запрос заказов для конкретного пользователя GET /api/orders без авторизации")
+    public Response getOrdersByUser() {
+        return client.getRequest(client.BASE_URL + client.ORDERS_ENDPOINT);
+    }
 
     @Step("Ожидание {t} мс")
     public void timeout(long t) throws RuntimeException {
