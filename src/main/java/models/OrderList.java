@@ -4,11 +4,11 @@ import java.util.List;
 
 public class OrderList {
     private Boolean success;
-    private List<Order> orders;
+    private List<OrderRequested> orders;
     private Long total;
     private Long totalToday;
 
-    public OrderList(Boolean success, List<Order> orders, Long total, Long totalToday) {
+    public OrderList(Boolean success, List<OrderRequested> orders, Long total, Long totalToday) {
         this.success = success;
         this.orders = orders;
         this.total = total;
@@ -23,11 +23,11 @@ public class OrderList {
         this.success = success;
     }
 
-    public List<Order> getOrders() {
+    public List<OrderRequested> getOrders() {
         return orders;
     }
 
-    public void setOrders(List<Order> orders) {
+    public void setOrders(List<OrderRequested> orders) {
         this.orders = orders;
     }
 

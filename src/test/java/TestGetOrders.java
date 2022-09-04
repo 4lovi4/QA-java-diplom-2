@@ -8,9 +8,6 @@ import org.junit.After;
 import client.TestMethods;
 import io.restassured.response.Response;
 import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.runner.RunWith;
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +19,7 @@ public class TestGetOrders {
     private User user;
     private List<Ingredient> ingredientList = testMethods.getIngredients().as(GetAllIngredientsResponse.class).getData();
     private Random random = new Random();
-    private List<Order> createdOrders = new ArrayList<Order>();
+    private List<OrderCreated> createdOrders = new ArrayList<OrderCreated>();
 
     @Before
     public void prepareTest() {
@@ -30,7 +27,6 @@ public class TestGetOrders {
                 testMethods.genRandomAlfaString() + ".test",
                 testMethods.genRandomAlfaNumString(),
                 testMethods.genRandomAlfaString());
-        System.out.println(user.toString());
         authUser = testMethods.createUser(user).as(AuthResponse.class);
         testMethods.timeout(1000);
         int ordersAmount = random.nextInt(10);
@@ -60,13 +56,20 @@ public class TestGetOrders {
         Response getOrderResponse = testMethods.getOrdersByUser(authUser.getAccessToken());
         assertThat(getOrderResponse.statusCode()).isEqualTo(HttpStatus.SC_OK);
         OrderList ordersByUser = getOrderResponse.as(OrderList.class);
+        assertThat(ordersByUser.getSuccess()).isTrue();
+        assertThat(ordersByUser.getOrders().size()).isEqualTo(createdOrders.size());
+        assertThat(ordersByUser.getTotal()).isNotNull();
+        assertThat(ordersByUser.getTotalToday()).isNotNull();
     }
 
     @Test
     @DisplayName("Ошибка при получении заказов пользователя без авторизации")
     @Description("Вызвать метод GET /api/orders, не передав токен")
     public void getOrdersWithoutAuth() {
-
+        Response getOrderResponse = testMethods.getOrdersByUser();
+        assertThat(getOrderResponse.statusCode()).isEqualTo(HttpStatus.SC_UNAUTHORIZED);
+        assertThat(Boolean.parseBoolean(getOrderResponse.then().extract().path("success").toString())).isFalse();
+        assertThat(getOrderResponse.then().extract().path("message").toString()).isEqualTo("You should be authorised");
     }
 
 }

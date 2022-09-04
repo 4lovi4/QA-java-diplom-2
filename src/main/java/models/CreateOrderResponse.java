@@ -3,9 +3,9 @@ package models;
 public class CreateOrderResponse {
     private String name;
     private Boolean success;
-    private Order order;
+    private OrderCreated order;
 
-    public CreateOrderResponse(String name, Boolean success, Order order) {
+    public CreateOrderResponse(String name, Boolean success, OrderCreated order) {
         this.name = name;
         this.success = success;
         this.order = order;
@@ -27,11 +27,11 @@ public class CreateOrderResponse {
         this.success = success;
     }
 
-    public Order getOrder() {
+    public OrderCreated getOrder() {
         return order;
     }
 
-    public void setOrder(Order order) {
+    public void setOrder(OrderCreated order) {
         this.order = order;
     }
 }
