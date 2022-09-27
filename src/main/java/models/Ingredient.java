@@ -1,24 +1,38 @@
 package models;
+import com.google.gson.annotations.SerializedName;
+
 
 public class Ingredient {
-    private String _id;
+    @SerializedName("_id")
+    private String id;
+    @SerializedName("name")
     private String name;
+    @SerializedName("type")
     private String type;
+    @SerializedName("proteins")
     private Long proteins;
+    @SerializedName("fat")
     private Long fat;
+    @SerializedName("carbohydrates")
     private Long carbohydrates;
+    @SerializedName("calories")
     private Long calories;
+    @SerializedName("price")
     private Double price;
+    @SerializedName("image")
     private String image;
-    private String image_mobile;
-    private String image_large;
-    private float __v;
+    @SerializedName("image_mobile")
+    private String imageMobile;
+    @SerializedName("image_large")
+    private String imageLarge;
+    @SerializedName("__v")
+    private float v;
 
-    public Ingredient(String _id, String name, String type, Long proteins,
+    public Ingredient(String id, String name, String type, Long proteins,
                       Long fat, Long carbohydrates, Long calories, Double price,
-                      String image, String image_mobile, String image_large)
+                      String image, String imageMobile, String imageLarge)
     {
-        this._id = _id;
+        this.id = id;
         this.name = name;
         this.type = type;
         this.proteins = proteins;
@@ -27,16 +41,16 @@ public class Ingredient {
         this.carbohydrates = carbohydrates;
         this.price = price;
         this.image = image;
-        this.image_mobile = image_mobile;
-        this.image_large = image_large;
+        this.imageMobile = imageMobile;
+        this.imageLarge = imageLarge;
     }
 
-    public String get_id() {
-        return _id;
+    public String getId() {
+        return id;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -103,27 +117,27 @@ public class Ingredient {
         this.image = image;
     }
 
-    public String getImage_mobile() {
-        return image_mobile;
+    public String getImageMobile() {
+        return imageMobile;
     }
 
-    public void setImage_mobile(String image_mobile) {
-        this.image_mobile = image_mobile;
+    public void setImageMobile(String imageMobile) {
+        this.imageMobile = imageMobile;
     }
 
-    public String getImage_large() {
-        return image_large;
+    public String getImageLarge() {
+        return imageLarge;
     }
 
-    public void setImage_large(String image_large) {
-        this.image_large = image_large;
+    public void setImageLarge(String imageLarge) {
+        this.imageLarge = imageLarge;
     }
 
-    public float get__v() {
-        return __v;
+    public float getV() {
+        return v;
     }
 
-    public void set__v(float __v) {
-        this.__v = __v;
+    public void setV(float v) {
+        this.v = v;
     }
 }

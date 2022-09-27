@@ -1,10 +1,14 @@
 package models;
 
+import com.google.gson.annotations.SerializedName;
+import io.qameta.allure.internal.shadowed.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class OrderCreated {
     private List<Ingredient> ingredients;
-    private String _id;
+    @SerializedName("_id")
+    private String id;
     private String status;
     private Long number;
     private Double price;
@@ -12,9 +16,9 @@ public class OrderCreated {
     private String updatedAt;
     private User owner;
 
-    public OrderCreated(List<Ingredient> ingredients, String _id, String status, Long number, Double price, String createdAt, String updatedAt, User owner) {
+    public OrderCreated(List<Ingredient> ingredients, String id, String status, Long number, Double price, String createdAt, String updatedAt, User owner) {
         this.ingredients = ingredients;
-        this._id = _id;
+        this.id = id;
         this.status = status;
         this.number = number;
         this.owner = owner;
@@ -36,12 +40,12 @@ public class OrderCreated {
         this.ingredients = ingredients;
     }
 
-    public String get_id() {
-        return _id;
+    public String getId() {
+        return id;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getStatus() {

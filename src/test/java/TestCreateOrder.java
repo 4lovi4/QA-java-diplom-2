@@ -54,7 +54,7 @@ public class TestCreateOrder {
         Double burgerPrice = 0.0;
         for (int i = 0; i < random.nextInt(currentIngredients.size()); i++) {
             Ingredient ingredient = currentIngredients.get(random.nextInt(currentIngredients.size()));
-            ingredientsHashList.add(ingredient.get_id());
+            ingredientsHashList.add(ingredient.getId());
             burgerPrice += ingredient.getPrice();
         }
         Response orderResponse = testMethods.createOrder(new IngredientsHashList(ingredientsHashList), authUser.getAccessToken());
@@ -77,7 +77,7 @@ public class TestCreateOrder {
         List<String> ingredientsHashList = new ArrayList<String>();
         Random random = new Random();
         for (int i = 0; i < random.nextInt(currentIngredients.size()); i++) {
-            ingredientsHashList.add(currentIngredients.get(random.nextInt(currentIngredients.size())).get_id());
+            ingredientsHashList.add(currentIngredients.get(random.nextInt(currentIngredients.size())).getId());
         }
         Response orderResponse = testMethods.createOrder(new IngredientsHashList(ingredientsHashList));
         assertThat(orderResponse.then().extract().statusCode()).isEqualTo(HttpStatus.SC_OK);
@@ -97,7 +97,7 @@ public class TestCreateOrder {
         Double burgerPrice = 0.0;
         for (int i = 0; i < Integer.parseInt(ingredientsAmount); i++) {
             Ingredient ingredient = currentIngredients.get(random.nextInt(currentIngredients.size()));
-            ingredientsHashList.add(ingredient.get_id());
+            ingredientsHashList.add(ingredient.getId());
             burgerPrice += ingredient.getPrice();
         }
         Response orderResponse = testMethods.createOrder(new IngredientsHashList(ingredientsHashList), authUser.getAccessToken());
@@ -148,7 +148,7 @@ public class TestCreateOrder {
             String wrongHashId = testMethods.genRandomAlfaNumString(24);
             Ingredient ingredient = currentIngredients.get(random.nextInt(currentIngredients.size()));
             if(i % 2 == 0 ) ingredientsHashList.add(wrongHashId);
-            else ingredientsHashList.add(ingredient.get_id());
+            else ingredientsHashList.add(ingredient.getId());
         }
         Response errorResponse = testMethods.createOrder(new IngredientsHashList(ingredientsHashList), authUser.getAccessToken());
         assertThat(errorResponse.then().extract().statusCode()).isEqualTo(HttpStatus.SC_INTERNAL_SERVER_ERROR);

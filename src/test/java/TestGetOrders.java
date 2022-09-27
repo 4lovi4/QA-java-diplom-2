@@ -34,7 +34,7 @@ public class TestGetOrders {
             List<String> hashList = new ArrayList<String>();
             int ingredientsAmount = random.nextInt(ingredientList.size());
             for (int i = 0; i < ingredientsAmount; i++) {
-                hashList.add(ingredientList.get(random.nextInt(ingredientList.size())).get_id());
+                hashList.add(ingredientList.get(random.nextInt(ingredientList.size())).getId());
             }
             CreateOrderResponse orderResponse = testMethods.createOrder(new IngredientsHashList(hashList), authUser.getAccessToken()).as(CreateOrderResponse.class);
             testMethods.timeout(1000L);
